@@ -1,6 +1,6 @@
 #!/bin/sh
 ## c22backup.sh
-## Version 0.1
+## Version 0.2
 ## Darin Webb
 
 # A POSIX variable
@@ -8,10 +8,11 @@ OPTIND=1		 # Reset in case getopts has been used previously in the shell.
 
 # Initialize our own variables:
 output_file="./c22backup.log"
-verbose=0
+verbose=1		# Verbose option locked to 1 during development.
 mode=0
+use_screen=0
 
-while getopts "h?vbrcl:" opt; do
+while getopts "h?vbrcl:s:d:" opt; do
 	case "$opt" in
 	h|\?)
 		show_help
@@ -32,6 +33,13 @@ while getopts "h?vbrcl:" opt; do
 	l)	# Set Log File
 		output_file=$OPTARG
 		;;
+	s)	# Set Screen
+		use_screen=1
+		screen_name=$OPTARG
+		;;
+	d)	# Set data to backup
+		data_location=$OPTARG
+		;;
 	:)	
 		echo "Option -$OPTARG requires an argument." >&2
 		;;
@@ -42,12 +50,8 @@ shift $((OPTIND-1))
 
 [ "$1" = "--" ] && shift
 
-echo "verbose=$verbose, output_file='$output_file', mode='$mode', Leftovers: $@"
-
-echo.
-for i
-do
-  echo "-->$i"
-done
+if ($verbose); then
+	echo "verbose=$verbose, output_file='$output_file', mode='$mode', Leftovers: $@"
+fi
 
 # End of file

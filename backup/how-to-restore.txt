@@ -1,0 +1,29 @@
+# Prepare your restore space:
+
+cd /backup
+mkdir restore
+
+# Some restore examples
+#----------------------
+
+# Restore Latest backup
+cp -a /backup/July13/backup /backup/restore
+
+# another way to restore the latest backup
+rdiff-backup --restore-as-of now /backup/July13/backup /backup/restore
+
+# you can shorten --restore-as-of with -r
+rdiff-backup -r now /backup/July13/backup /backup/restore
+
+# some time examples
+rdiff-backup -r 10D /backup/July13/backup /backup/restore
+
+rdiff-backup -r 30m /backup/July13/backup /backup/restore
+
+rdiff-backup -r 4h22m /backup/July13/backup /backup/restore
+
+#midnight on Sept 8 (morning)
+rdiff-backup -r 2013-09-08 /backup/July13/backup /backup/restore
+
+#2pm on Sept 8
+rdiff-backup -r 2013-09-08T14:00:00 /backup/July13/backup /backup/restore

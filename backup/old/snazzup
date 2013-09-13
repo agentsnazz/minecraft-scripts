@@ -1,0 +1,149 @@
+#!/bin/bash
+
+#########################
+# Variable Declarations #
+#########################
+
+if [ -t 1 ]; then
+    txtblu=$(tput setaf 6) # Blue Text
+    txtpnk=$(tput setaf 5) # Pink Text
+    txtrst=$(tput sgr0)    # Text Reset
+fi
+
+menu_message=""
+
+#########################
+# Function Declarations #
+#########################
+
+function func_menu {
+    clear
+    echo "+-------------------------------------------------------+"
+    echo "|         Snazz's Awesome Backup Control Script         |"
+    echo "+-------------------------------------------------------+"
+    echo "| This script is awesome and lets you do all kinds of   |"
+    echo "| cool things relating to backups.                      |"
+    echo "|                                                       |"
+    echo "| Please choose an option:                              |"
+    echo "|                                                       |"
+    echo "|     1) Take INCREMENTAL backup                        |"
+    echo "|     2) Take DAILY backup                              |"
+    echo "|     3) Take ARCHIVE backup (first, final, etc.)       |"
+    echo "|     4) CLEAN old backups                              |"
+    echo "|     5) exit                                           |"
+    echo "|                                                       |"
+    echo "| You can also run this script with a keyword argument  |"
+    echo "| to jump immediately to that submenu, or to preselect  |"
+    echo "| task options. See submenus for details.               |"
+    echo "|                                                       |"
+    echo "| Example:                                              |"
+    echo "|     backup-control incremental                        |"
+    echo "|     backup-control daily <screenname> <servername>    |"
+    echo "|                                                       |"
+    echo "+-------------------------------------------------------+"
+    echo ""
+    echo $menu_message
+    menu_message=""
+    read -p "Choose An Option: " input
+    echo ""
+    case $input in
+        "1") func_incremental $2 $3;;
+        "2") func_daily $2 $3;;
+        "3") func_archive $2;;
+        "4") func_clean $2 %3;;
+        "5") func_exit;;
+        "cheatcode") func_cheatcode;;
+        "pink") func_pink;;
+        "blue") func_blue;;
+        *) func_menu;;
+    esac
+}
+
+function func_incremental {
+    menu_message="func_incremental doesn't do anything yet!"
+    func_menu
+}
+
+function func_daily {
+    menu_message="func_daily doesn't do anything yet!"
+    func_menu
+}
+
+function func_archive {
+    menu_message="func_archive doesn't do anything yet!"
+    func_menu
+}
+
+function func_clean {
+    menu_message="func_clean doesn't do anything yet!"
+    func_menu
+}
+
+function func_cheatcode {
+    clear
+    textreset
+    echo "                      ,.----------.     "
+    echo "    Spot of tea,     ((|          |     "
+    echo "     Motherfucker?  .--\          /--.  "
+    echo "                   '._  '========'  _.' "
+    echo "                      **************    "
+    func_exit
+}
+
+function func_pink {
+    if [ -t 1 ]; then
+        echo $(tput setaf 5)  # Yay fancy colours!
+    fi
+    menu_message="No Icky Boys Allowed!"
+    func_menu
+}
+
+function func_blue {
+    if [ -t 1 ]; then
+        echo $(tput setaf 6)  # Yay fancy colours!
+    fi
+    menu_message="No Gross Girls Allowed!"
+    func_menu
+}
+
+function textreset {
+    if [ -t 1 ]; then
+        echo $(tput sgr0)  # Boo boring colours!
+    fi
+}
+
+function func_exit {
+    textreset
+    exit
+}
+
+###############
+# Main Script #
+###############
+
+# Parse First Arguement
+if [ -z "$1" ]; then
+    arg1=""
+fi
+
+arg1= $1 | tr '[A-Z]' '[a-z]'
+
+case $arg1 in
+    "") func_menu;;
+    "incremental") func_incremental $2 $3;;
+    "daily") func_daily $2 $3;;
+    "archive") func_archive $2;;
+    "clean") func_clean $2 %3;;
+    *)
+        menu_message="Invalid Option, Welcome To The Main Menu"
+        func_menu
+        ;;
+esac
+
+#############
+# END BLOCK #
+#############
+
+echo "WARNING: ABNORMAL PROGRAM TERMINATION - END REACHED"
+textreset
+exit

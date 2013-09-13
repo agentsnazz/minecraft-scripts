@@ -1,0 +1,98 @@
+#!/bin/bash
+
+if [ -t 1 ]; then
+    txtblu=$(tput setaf 6) # Blue Text
+    txtrst=$(tput sgr0)    # Text Reset
+    echo ${txtblu}  # Yay fancy colours!
+fi
+
+if [ -z "$1" ]; then
+    echo "+-------------------------------------------------------+"
+    echo "|         Snazz's Awesome Backup Control Script         |"
+    echo "+-------------------------------------------------------+"
+    echo "| This script is awesome and lets you do all kinds of   |"
+    echo "| cool things relating to backups.                      |"
+    echo "|                                                       |"
+    echo "| Please choose an option:                              |"
+    echo "|                                                       |"
+    echo "|     1) Take INCREMENTAL backup                        |"
+    echo "|     2) Take DAILY backup                              |"
+    echo "|     3) Take ARCHIVE backup (first, final, etc.)       |"
+    echo "|     4) CLEAN old backups                              |"
+    echo "|     5) exit                                           |"
+    echo "|                                                       |"
+    echo "| You can also run this script with a keyword arguement |"
+    echo "| to jump immediately to that submenu, or to preselect  |"
+    echo "| task options. See submenus for details.               |"
+    echo "|                                                       |"
+    echo "| Example:                                              |"
+    echo "|     backup-control incremental                        |"
+    echo "|     backup-control daily <screenname> <servername>    |"
+    echo "|                                                       |"
+    echo "+-------------------------------------------------------+"
+    echo ${txtrst}
+    exit
+fi
+
+
+echo "+-------------------------------------------------------+"
+echo "|         Snazz's Awesome Backup Control Script         |"
+echo "+-------------------------------------------------------+"
+echo "| This script is awesome and lets you do all kinds of   |"
+echo "| cool things relating to backups.                      |"
+echo "|                                                       |"
+echo "| Please choose an option:                              |"
+echo "|                                                       |"
+echo "|     1) Take INCREMENTAL backup                        |"
+echo "|     2) Take DAILY backup                              |"
+echo "|     3) Take ARCHIVE backup (first, final, etc.)       |"
+echo "|     4) CLEAN old backups                              |"
+echo "|     5) exit                                           |"
+echo "|                                                       |"
+echo "| You can also run this script with a keyword arguement |"
+echo "| to jump immediately to that submenu, or to preselect  |"
+echo "| task options. See submenus for details.               |"
+echo "|                                                       |"
+echo "| Example:                                              |"
+echo "|     backup-control incremental                        |"
+echo "|     backup-control daily <screenname> <servername>    |"
+echo "|                                                       |"
+echo "+-------------------------------------------------------+"
+
+exit
+
+echo "-------------------------------------------"
+echo "--       RDRollup - by AgentSnazz        --"
+echo "-------------------------------------------"
+echo "-- $(date +%Y-%m-%d-%H%M)"
+
+# Identify backup path.
+SERVERDIR=$1
+echo "-- Server Dir = $SERVERDIR"
+# `minecraft/janperm` becomes `janperm`
+WORLD=${SERVERDIR##*/}
+echo "-- World = $WORLD"
+BACKUPS="/backup/$WORLD/backup"
+echo "-- Backups = $BACKUPS"
+
+
+# Deleted old incrementals older than the specified time
+echo "-- Deleting Old Incrementals..."
+rdiff-backup --force --remove-older-than $2 $BACKUPS
+echo "-- Old Incrementals Deleted"
+
+# Deleting old dailies older than 7 days
+echo "-- Deleting Old Dailies..."
+find /backup/april13/april13*.tar.gz -maxdepth 0 -type f -mtime +6 -delete
+echo "-- Old Dalies Deleted"
+
+# Create Weekly backup by copying Monday morning's daily
+
+# Only keep 7 most recent dailies
+
+echo "-- RDRollup script complete"
+echo "-------------------------------------------"
+
+if [ -t 1 ]; then
+    echo ${txtrst}
+fi

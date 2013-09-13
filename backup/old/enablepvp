@@ -1,0 +1,22 @@
+#!/bin/bash
+    echo "+-------------------------------------------------------+"
+    echo "| Wahle's Super Awesome Server Manipulation script      |"
+    echo "|    Totally not based on Snazz's backup Script.        |"
+    echo "+-------------------------------------------------------+"
+    echo "| I should write a better description here, but in      |"
+    echo "| this script uses RDiff to make an incremental backup  |"
+    echo "| of the target server running in a screen.             |"
+    echo "+-------------------------------------------------------+"
+    echo ${txtrst}
+
+SCREEN=$1 # I should really add some error checking to this line.
+
+echo "-------------------------------------------"
+echo "--     Enable PVP - by Wahledor          --"
+echo "-------------------------------------------"
+
+# Warn players in game of impending action.
+screen -p 0 -S $SCREEN -X eval 'stuff "broadcast Enabling PVP! "\015'
+screen -p 0 -S $SCREEN -X eval 'stuff "wg reload"\015'
+screen -p 0 -S $SCREEN -X eval 'stuff "rg reload"\015'
+screen -p 0 -S $SCREEN -X eval 'stuff "broadcast PVP is now Enabled! "\015'

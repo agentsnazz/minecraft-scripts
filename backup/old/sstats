@@ -1,0 +1,3 @@
+screen -p 0 -S $1 -X eval 'stuff \036"ss"\015'
+sleep 0.5
+tail -n 22 /minecraft/april13/server.log

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Backing up $1 to /home/supers/backup/$1"
+mkdir /home/supers/backup/$1
+tar -zcvf /home/supers/backup/$1/$1-$(date +%Y-%m-%d-%H%M).tar.gz $1

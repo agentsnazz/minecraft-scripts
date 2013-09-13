@@ -1,0 +1,1 @@
+tail -n 35 /var/spool/mail/supers

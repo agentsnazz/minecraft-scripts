@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Yay fancy colours!
+echo $(tput setaf 6)
+
+if [ -z "$1" ]; then
+    echo "+-------------------------------------------------------+"
+    echo "| Snazz's Awesome RDiff Backup Script                   |"
+    echo "+-------------------------------------------------------+"
+    echo "| I should write a better description here, but in      |"
+    echo "| this script uses RDiff to make an incremental backup  |"
+    echo "| of the target server running in a screen. Then zips   |"
+    echo "| the backup in prep for offsite transfer               |"
+    echo "|                                                       |"
+    echo "| Run this from the /supers home directory.             |"
+    echo "|   usage:                                              |"
+    echo "|        rdbackup <ServerScreen> <ServerFolder>         |"
+    echo "|   example:                                            |"
+    echo "|        rdbackup server April_Main                     |"
+    echo "+-------------------------------------------------------+"
+    echo $(tput sgr0)
+    exit
+fi
+
+SCREEN=$1 # I should really add some error checking to this line.
+
+echo "-------------------------------------------"
+echo "--        rdbackup - by AgentSnazz         "
+echo "-------------------------------------------"
+echo "-- $(date +%Y-%m-%d-%H%M)"
+
+# Warn players in game of impending activity.
+screen -p 0 -S $SCREEN -X eval 'stuff "broadcast Starting Automated Backup, Do Not Be Alarmed."\015'
+
+# Identify target directory and prepare destination path.
+SOURCE=$2
+echo "-- Source = $SOURCE"
+DEST="/home/supers/backup/$SOURCE"
+mkdir -p $DEST
+echo "-- Dest = $DEST"
+FILENAME=/$SOURCE-$(date +%Y-%m-%d-%H%M).tar.gz
+echo "-- Filename = $FILENAME"
+
+# Save all chunks in game.
+echo "-- Saving chunks..."
+screen -p 0 -S $SCREEN -X eval 'stuff "save-off"\015'
+screen -p 0 -S $SCREEN -X eval 'stuff "save-all"\015'
+echo "-- Chunks saved"
+
+# Create new rdiff backup of live server.
+echo "-- Creating incremental backup..."
+rdiff-backup --force /$SOURCE $DEST/backup
+echo "-- RDiff Incremental Created"
+
+# Notify players in game that major activity is complete.
+screen -p 0 -S $SCREEN -X eval 'stuff "save-on"\015'
+screen -p 0 -S $SCREEN -X eval 'stuff "broadcast Automated Backup Complete, Carry On."\015'
+
+# Tar the mirror server.
+echo "-- Zipping restored backup..."
+tar --exclude="$DEST/backup/rdiff-backup-data/*.*" --exclude="$DEST/backup/rdiff-backup-data" -xvf $DEST/$FILENAME $DEST/backup
+
+# Creating info file for offsite backups.
+echo "-- Prepping for transfer..."
+echo $DEST/$FILENAME > /home/supers/backup/mostrecent.txt
+echo "-- Backup prepped for transfer"
+echo "-- RDBackup script complete"
+echo "-------------------------------------------"
+echo $(tput sgr0)

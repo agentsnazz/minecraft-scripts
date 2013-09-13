@@ -1,0 +1,41 @@
+echo Please Wait While The Server Reboots
+
+screen -p 0 -S mc -X eval 'stuff \036"broadcast ATTENTION - Server Rebooting In 30 Seconds"\015'
+# screen -p 0 -S $1 -X eval 'stuff \036"broadcast Test #1 of 3"\015'
+sleep 0.5
+tail -n 1 /minecraft/april13/server.log
+sleep 9.5
+
+screen -p 0 -S mc -X eval 'stuff \036"broadcast ATTENTION - Server Rebooting In 20 Seconds"\015'
+# screen -p 0 -S $1 -X eval 'stuff \036"broadcast Test #2 of 3"\015'
+sleep 0.5
+tail -n 1 /minecraft/april13/server.log
+sleep 9.5
+
+screen -p 0 -S mc -X eval 'stuff \036"broadcast ATTENTION - Server Rebooting In 10 Seconds"\015'
+# screen -p 0 -S $1 -X eval 'stuff \036"broadcast Test #3 of 3"\015'
+sleep 0.5
+tail -n 1 /minecraft/april13/server.log
+sleep 9.5
+
+screen -p 0 -S mc -X eval 'stuff \036"broadcast ATTENTION - Server Rebooting Now"\015'
+# screen -p 0 -S $1 -X eval 'stuff \036"broadcast Test #4 of 3"\015'
+sleep 0.5
+tail -n 1 /minecraft/april13/server.log
+
+screen -p 0 -S mc -X eval 'stuff \036"save-all"\015'
+sleep 1
+tail -n 1 /minecraft/april13/server.log
+
+echo Stopping Server
+screen -p 0 -S mc -X eval 'stuff \036"stop"\015'
+sleep 10
+
+echo Attempting To Start Server
+screen -p 0 -S mc -X eval 'stuff \036"clear"\015'
+screen -p 0 -S mc -X eval 'stuff \036"sh start.sh"\015'
+sleep 15
+
+screen -p 0 -S mc -X eval 'stuff \036"ss"\015'
+sleep 0.5
+tail -n 22 /minecraft/april13/server.log

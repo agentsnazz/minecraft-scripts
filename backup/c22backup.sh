@@ -31,6 +31,7 @@ while getopts "h?vbrcl:" opt; do
 		;;
 	l)	# Set Log File
 		output_file=$OPTARG
+		;;
 	:)	
 		echo "Option -$OPTARG requires an argument." >&2
 		;;

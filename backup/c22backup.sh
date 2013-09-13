@@ -33,6 +33,7 @@ while getopts "h?vbrcl:" opt; do
 		output_file=$OPTARG
 	:)	
 		echo "Option -$OPTARG requires an argument." > &2
+		;;
 	esac
 done
 

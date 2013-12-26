@@ -50,7 +50,7 @@ echo "-- Old Incrementals Deleted"
 
 # Deleting old dailies older than 7 days
 echo "-- Deleting Old Dailies..."
-find /backup/april13/april13*.tar.gz -maxdepth 0 -type f -mtime +6 -delete
+find /backup/$WORLD/$WORLD*.tar.gz -maxdepth 0 -type f -mtime +6 -delete
 echo "-- Old Dalies Deleted"
 
 # Create Weekly backup by copying Monday morning's daily
